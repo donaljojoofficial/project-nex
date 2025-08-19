@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}IntruNex - Active Threat Monitor{% endblock %}
+
+{% block body %}
+<section id="threat-dashboard" style="text-align:center;">
+    <h2 style="font-size:2.5rem; margin-bottom:0.5rem;">
+        🚨 Live Network Status
+    </h2>
+    <p style="font-size:1.2rem; opacity:0.8;">
+        Real‑time exploit detection feed
+    </p>
+
+    <div id="threat-cards" style="
+        display:grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-top:2rem;
+    ">
+        {% for threat in threats %}
+            <div style="border:2px solid #0f0; padding:1rem; background:#050505;">
+                <h3 style="color:{{ threat.color }};">{{ threat.level }}</h3>
+                <p>{{ threat.message }}</p>
+            </div>
+        {% endfor %}
+    </div>
+</section>
+
+<script>
+    async function refreshThreats() {
+        try {
+            const res = await fetch('{{ path("app_home") }}'); 
+            const html = await res.text();
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            const newCards = doc.querySelector('#threat-cards').innerHTML;
+            document.querySelector('#threat-cards').innerHTML = newCards;
+        } catch (err) {
+            console.error('Error refreshing threats:', err);
+        }
+    }
+
+    // Auto‑refresh every 10 seconds
+    setInterval(refreshThreats, 10000);
+</script>
+{% endblock %}
