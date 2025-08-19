@@ -202,3 +202,94 @@ final class HomeController extends AbstractController
     </button>
 </section>
 {% endblock %}
+
+
+
+<?php
+
+namespace App\IntruNexCore\Controller;
+//namespace App\Controller;
+
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
+
+final class IntruNexCoreController extends AbstractController
+{
+    #[Route('/intru/nex/core', name: 'app_intru_nex_core')]
+    public function index(): Response
+    {
+        return $this->render('intru_nex_core/index.html.twig', [
+            'controller_name' => 'IntruNexCoreController',
+        ]);
+    }
+}
+
+
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Log in!{% endblock %}
+
+{% block body %}
+<form method="post">
+    {% if error %}
+        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+    {% endif %}
+
+    {% if app.user %}
+        <div class="mb-3">
+            You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
+        </div>
+    {% endif %}
+
+    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+    <label for="inputTestuser">Testuser</label>
+    <input type="text" value="{{ last_username }}" name="testuser" id="inputTestuser" class="form-control" autocomplete="username" required autofocus>
+    <label for="inputPassword">Password</label>
+    <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
+    <input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('authenticate') }}">
+
+    <button class="btn btn-lg btn-primary" type="submit">
+        Sign in
+    </button>
+</form>
+{% endblock %}
+{% extends 'base.html.twig' %}
+
+{% block title %}Login | IntruNex{% endblock %}
+
+{% block body %}
+<section style="background:#000; color:#0f0; padding:3rem; text-align:center;">
+    <h1 style="font-size:2.5rem;">🔐 IntruNex Login</h1>
+    <form method="post" style="margin-top:2rem;">
+        <input type="email" name="_username" placeholder="Email" required
+            style="background:#111; border:2px solid #0f0; color:#0ff; padding:0.8rem; margin-bottom:1rem; width:300px;"><br>
+        <input type="password" name="_password" placeholder="Password" required
+            style="background:#111; border:2px solid #0f0; color:#0ff; padding:0.8rem; margin-bottom:1rem; width:300px;"><br>
+        <button type="submit" style="background:#0f0; color:#000; padding:0.8rem 2rem;">Login</button>
+    </form>
+    <p style="margin-top:1rem;"><a href="/register" style="color:#0ff;">Need an account? Register</a></p>
+</section>
+{% endblock %}
+
+
+
+<?php
+
+namespace App\IntruNexCore\Controller;
+
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+
+class IntruNexCoreController extends AbstractController
+{
+    #[Route('/dashboard', name: 'app_dashboard')]
+    public function index(): Response
+    {
+        return $this->render('dashboard.html.twig', [
+            'user' => $this->getUser(),
+        ]);
+    }
+}

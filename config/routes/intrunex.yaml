@@ -1,0 +1,3 @@
+intru_nex_core:
+    resource: ../../src/IntruNexCore/Controller/
+    type: attribute
